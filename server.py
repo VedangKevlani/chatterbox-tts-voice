@@ -1,4 +1,5 @@
 import json
+import os
 import threading
 import time
 import uuid
@@ -142,4 +143,8 @@ if __name__ == "__main__":
 	# Warm the model up in the background so the first click from the UI
 	# doesn't have to eat the (slow) model + reference-conditioning load.
 	threading.Thread(target=engine.ensure_loaded, daemon=True).start()
-	app.run(host="127.0.0.1", port=7860, threaded=True)
+	# HOST=0.0.0.0 is required in a container (Render/HF Spaces) so the
+	# platform's proxy can reach the process; local dev keeps 127.0.0.1.
+	host = os.environ.get("HOST", "127.0.0.1")
+	port = int(os.environ.get("PORT", 7860))
+	app.run(host=host, port=port, threaded=True)
