@@ -1,8 +1,18 @@
 import os
 import re
 import subprocess
+import sys
 import tempfile
 import threading
+from pathlib import Path
+
+# The `chatterbox` package lives under src/ (src layout). Locally it's
+# importable because of the editable install from pyproject.toml, but
+# deployment (HF Spaces) installs from requirements.txt without that
+# editable install, so make sure src/ is on the path either way.
+_SRC_DIR = str(Path(__file__).resolve().parent / "src")
+if _SRC_DIR not in sys.path:
+	sys.path.insert(0, _SRC_DIR)
 
 import soundfile as sf
 import torch
