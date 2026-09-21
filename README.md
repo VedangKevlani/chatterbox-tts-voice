@@ -77,30 +77,43 @@ first "Generate" click waits on warmup if it hasn't finished yet.
 
 This app needs a real, persistent process with a few GB of RAM to hold
 the model — it does **not** fit serverless platforms (Vercel) or
-free-tier hosts with ~512MB RAM (Render's free/Starter tiers). Hugging
-Face Spaces' free CPU tier (16GB RAM) is a good fit.
+free-tier hosts with ~512MB RAM (Render's free/Starter tiers).
 
-Spaces' **Docker** SDK now requires a verified payment method on file
-even for free hardware, so deployment uses the **Gradio** SDK instead
-(no card required) via `gradio_app.py` — a separate entry point that
-reuses `tts_engine.py` but rebuilds the UI in Gradio's component model
+Spaces' **Docker** SDK requires a verified payment method on file even
+for free hardware, and plain **CPU Basic** hardware is also gated
+behind a paid plan on some accounts. Deployment instead targets the
+**Gradio SDK + ZeroGPU** hardware, which is free with no card: the
+underlying node has generous CPU/RAM even between GPU bursts (plenty
+for this model), and `tts_engine.py` auto-detects CUDA, so generation
+actually runs on the GPU when it's attached — expect this to be far
+faster than the CPU-only path used for local dev.
+
+`gradio_app.py` is the deployment entry point: it reuses
+`tts_engine.py` but rebuilds the UI in Gradio's component model
 (native progress bar, audio player, and download button) instead of
-the custom Flask/HTML frontend. Local development is unaffected; keep
-using `server.py` as described above.
+the custom Flask/HTML frontend, and wraps generation in
+`@spaces.GPU` so it runs inside a ZeroGPU-attached call. Local
+development is unaffected; keep using `server.py` as described above.
 
 1. Create a new Space at <https://huggingface.co/new-space> with
-   **SDK: Gradio** and **Hardware: CPU Basic (free)**. Note the git
-   URL it gives you (`https://huggingface.co/spaces/<you>/<space-name>`).
+   **SDK: Gradio** and **Hardware: ZeroGPU**. Note the git URL it
+   gives you (`https://huggingface.co/spaces/<you>/<space-name>`).
 2. Add it as a second git remote alongside GitHub and push:
    ```bash
    git remote add space https://huggingface.co/spaces/<you>/<space-name>
    git push space main
    ```
 3. The Space reads `app_file: gradio_app.py` from this README's
-   frontmatter and runs it directly — no Dockerfile involved.
+   frontmatter and runs it directly.
 4. First run downloads the model checkpoint from Hugging Face and
-   loads it into memory — expect the Space, and the first "Generate"
-   click, to take a few minutes before responding the first time.
+   loads it — expect the Space, and the first "Generate" click, to
+   take a little while before responding the first time.
+
+**Note:** ZeroGPU's free quota is limited (a capped amount of GPU-time
+per day, higher if you're signed into a free HF account than fully
+anonymous) — this hasn't been tested against real quota limits yet,
+so if generations start failing after heavy use, that's the likely
+cause.
 
 ### Keeping it awake (UptimeRobot)
 

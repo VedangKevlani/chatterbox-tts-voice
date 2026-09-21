@@ -9,10 +9,26 @@ import gradio as gr
 
 from tts_engine import TTSEngine
 
+try:
+	import spaces
+	HAS_ZEROGPU = True
+except ImportError:
+	HAS_ZEROGPU = False
+
 # This is the deployment entry point (Hugging Face Spaces, Gradio SDK -
 # no card required, unlike the Docker SDK). Local development still uses
 # server.py + static/ (the custom Flask UI) unchanged; this file adapts the
 # same engine to Gradio's component model instead.
+#
+# On a ZeroGPU Space, generation needs to happen inside a function
+# decorated with @spaces.GPU - that's the only window a GPU is actually
+# attached. tts_engine.py auto-detects CUDA and uses it when present.
+# Locally (no `spaces` package, or no GPU), this decorator is a no-op and
+# generation runs on CPU exactly as before.
+def gpu_decorator(duration=180):
+	if HAS_ZEROGPU:
+		return spaces.GPU(duration=duration)
+	return lambda fn: fn
 
 BASE_DIR = Path(__file__).resolve().parent
 OUTPUT_DIR = BASE_DIR / "outputs"
@@ -45,6 +61,7 @@ def data_uri(path):
 	return f"data:image/png;base64,{base64.b64encode(data).decode()}"
 
 
+@gpu_decorator(duration=180)
 def generate(text, version, progress=gr.Progress()):
 	text = (text or "").strip()
 	if not text:

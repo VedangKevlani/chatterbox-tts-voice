@@ -519,6 +519,7 @@ dependencies = [
     { name = "s3tokenizer" },
     { name = "safetensors" },
     { name = "soundfile" },
+    { name = "spaces" },
     { name = "spacy-pkuseg" },
     { name = "torch", version = "2.6.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.14'" },
     { name = "torch", version = "2.14.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.14'" },
@@ -543,6 +544,7 @@ requires-dist = [
     { name = "s3tokenizer" },
     { name = "safetensors", specifier = "==0.5.3" },
     { name = "soundfile" },
+    { name = "spaces" },
     { name = "spacy-pkuseg" },
     { name = "torch", marker = "python_full_version < '3.14'", specifier = "==2.6.0" },
     { name = "torch", marker = "python_full_version >= '3.14'", specifier = ">=2.9.0" },
@@ -3279,6 +3281,23 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/39/e4/80cd9aae0645513db1076d4384e8b2d895faf5009218b4a04348012c54fc/soxr-1.1.0-cp314-cp314t-manylinux_2_26_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:52c9ca84e3dc656d83acc424574770e20ea8e0704dc3842d4e27b0fe9d3ba449", size = 211405, upload-time = "2026-05-03T00:15:05.395Z" },
     { url = "https://files.pythonhosted.org/packages/a6/d6/cc3c80ac9b2289da4cf46c5d53b05e4327e6f5560a25868d06f9e2213af1/soxr-1.1.0-cp314-cp314t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:f4977323ef9c3aa3c2a26ff5fe0191c84b8fd759daf7afb1f25a91a55ad8b730", size = 244617, upload-time = "2026-05-03T00:15:07.134Z" },
     { url = "https://files.pythonhosted.org/packages/d3/9e/f7af5fae841ffe32ed8440234ea2ad6adecca3bd92b6101076268c429000/soxr-1.1.0-cp314-cp314t-win_amd64.whl", hash = "sha256:e17d4ef9b0185214b2c0935605ae63f827ea423bc74964be44763d68d2b6c21e", size = 187253, upload-time = "2026-05-03T00:15:08.813Z" },
+]
+
+[[package]]
+name = "spaces"
+version = "0.51.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "gradio" },
+    { name = "httpx" },
+    { name = "packaging" },
+    { name = "pydantic" },
+    { name = "requests" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ad/9c/8d72b1736fdb27be10bb3596f0bcbd1a6d0ec66e795d3e7ca56160e76ab7/spaces-0.51.3.tar.gz", hash = "sha256:affe3e60a114f9d2cc8394526460f82acaac4351d5982e8741b36dace736f8ae", size = 88743, upload-time = "2026-08-31T13:19:25.768Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f5/b3/f6c0dfa766e0fc5ae66466235c13be580e543d8d2d9023f678ba5859adca/spaces-0.51.3-py3-none-any.whl", hash = "sha256:e588ce6b4301c566139d84bafb1c30b555967ce4ee2792be659ee5643f0f7eb1", size = 111776, upload-time = "2026-08-31T13:19:27.829Z" },
 ]
 
 [[package]]

@@ -30,7 +30,8 @@ dependencies = [
     "pyloudnorm",
     "omegaconf",
     "soundfile",
-    "flask"
+    "flask",
+    "spaces"
 ]
 
 [project.urls]

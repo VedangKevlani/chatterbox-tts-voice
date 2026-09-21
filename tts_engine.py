@@ -71,7 +71,10 @@ class TTSEngine:
 			if self._model is not None:
 				return
 			self._reference_wav = build_reference_wav()
-			model = ChatterboxTurboTTS.from_pretrained(device="cpu")
+			# Auto-detect: CPU everywhere by default, GPU when one is actually
+			# available (e.g. HF Spaces ZeroGPU), for much faster generation.
+			device = "cuda" if torch.cuda.is_available() else "cpu"
+			model = ChatterboxTurboTTS.from_pretrained(device=device)
 			model.prepare_conditionals(self._reference_wav, norm_loudness=True)
 			self._model = model
 
