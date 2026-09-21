@@ -1,3 +1,12 @@
+# `spaces` must be imported before anything CUDA-related (torch, which
+# tts_engine.py imports) - ZeroGPU patches CUDA init and errors out if
+# that happens too late. Must stay the first import in this file.
+try:
+	import spaces
+	HAS_ZEROGPU = True
+except ImportError:
+	HAS_ZEROGPU = False
+
 import base64
 import json
 import os
@@ -8,12 +17,6 @@ from pathlib import Path
 import gradio as gr
 
 from tts_engine import TTSEngine
-
-try:
-	import spaces
-	HAS_ZEROGPU = True
-except ImportError:
-	HAS_ZEROGPU = False
 
 # This is the deployment entry point (Hugging Face Spaces, Gradio SDK -
 # no card required, unlike the Docker SDK). Local development still uses
